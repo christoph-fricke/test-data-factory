@@ -5,11 +5,8 @@ on:
     branches: [main]
   pull_request:
 
-env:
-  CI: true
-
 jobs:
-  build:
+  verify:
     runs-on: macos-latest
     steps:
       - name: Checkout
