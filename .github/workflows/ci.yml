@@ -25,3 +25,5 @@ jobs:
         run: npm run lint
       - name: Build Package
         run: npm run build
+      - name: Run Test Suite
+        run: npm run test:cov
