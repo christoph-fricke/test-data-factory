@@ -1,1 +1,1 @@
-export const hello = "Hello, World.";
+export { hello } from "../src/temp.js";
