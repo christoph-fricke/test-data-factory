@@ -1,0 +1,14 @@
+# Runs commands in sequence to ensure that eslint fixes are formatted as well.
+pre-commit:
+  parallel: false
+  commands:
+    lint:
+      priority: 1
+      glob: "*.{ts,js,mjs}"
+      run: npx eslint --fix {staged_files}
+      stage_fixed: true
+    format:
+      priority: 2
+      glob: "*"
+      run: npx prettier --ignore-unknown --write {staged_files}
+      stage_fixed: true
