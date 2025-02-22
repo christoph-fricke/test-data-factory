@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "test-data-factory",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Christoph Fricke <christoph@frickeonline.de>",
+  "description": "Flexible test-data factories and store mechanisms.",
+  "repository": "github:christoph-fricke/test-data-factory",
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/exports/main.d.ts",
+      "import": "./dist/exports/main.js"
+    }
+  },
+  "scripts": {
+    "build": "rimraf ./dist && tsc -p tsconfig.build.json",
+    "format": "prettier --write .",
+    "lint": "eslint . && prettier -c ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "eslint": "^9.21.0",
+    "lefthook": "^1.10.11",
+    "prettier": "^3.5.2",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.1"
+  }
+}
