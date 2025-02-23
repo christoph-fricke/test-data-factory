@@ -25,9 +25,9 @@ suite("Basic Factory", () => {
   test("builds data based on the construct overwrite", () => {
     const factory = TaskFactory.create();
 
-    const data = factory.build();
+    const task = factory.build();
 
-    expect(data).toMatchInlineSnapshot(`
+    expect(task).toMatchInlineSnapshot(`
       {
         "id": 0,
         "name": "Task 0",
@@ -39,14 +39,35 @@ suite("Basic Factory", () => {
   test("builds refined version of the constructed data", () => {
     const factory = TaskFactory.create();
 
-    const data = factory.completed.build();
+    const task = factory.completed.build();
 
-    expect(data).toMatchInlineSnapshot(`
+    expect(task).toMatchInlineSnapshot(`
       {
         "id": 0,
         "name": "Task 0",
         "status": "completed",
       }
+    `);
+  });
+
+  test("builds a list of data", () => {
+    const factory = TaskFactory.create();
+
+    const tasks = factory.buildMany(2);
+
+    expect(tasks).toMatchInlineSnapshot(`
+      [
+        {
+          "id": 0,
+          "name": "Task 0",
+          "status": "open",
+        },
+        {
+          "id": 1,
+          "name": "Task 1",
+          "status": "open",
+        },
+      ]
     `);
   });
 });
