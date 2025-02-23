@@ -1,7 +1,7 @@
-import { Factory } from "./factory.js";
+import { Factory, type Context } from "./factory.js";
 
 export interface ConstructFn<Shape, F extends Factory<Shape>> {
-  (ctx: ReturnType<F["createContext"]>): Shape;
+  (ctx: Context<F>): Shape;
 }
 
 /**

@@ -6,16 +6,19 @@ import {
   type ParamsOrFunc,
 } from "./params.js";
 
-type Phase = (typeof phase)[keyof typeof phase];
-const phase = {
-  idle: 0,
-  building: 1,
-} as const;
-
 type ShapeFor<F> = F extends Factory<infer S> ? S : never;
 interface FactoryClass<Factory, Shape> {
   new (state: SharedState, params?: Params<Shape>): Factory;
 }
+
+// This is a bit cursed but works and helps to keep "createContext" protected,
+// while allowing consumers to extend the build context...
+// Alternative is to make "createContext" public, but than it gets suggested and
+// has to throw when unintentionally called outside the factory.
+export type Context<F extends Factory<unknown>> = ReturnType<
+  // @ts-expect-error Protected member 'createContext' cannot be accessed on a type parameter.
+  F["createContext"]
+>;
 
 export interface FactoryContext<Shape> {
   params?: Params<Shape> | undefined;
@@ -25,15 +28,13 @@ export interface FactoryContext<Shape> {
 export abstract class Factory<Shape> {
   #state: SharedState;
   #params?: Params<Shape> | undefined;
-  #phase: Phase;
-  #context: ReturnType<this["createContext"]> | null;
+  #context: Context<this> | null;
 
   protected abstract construct(): Shape;
 
   constructor(state: SharedState, params?: Params<Shape>) {
     this.#state = state;
     this.#params = params;
-    this.#phase = phase.idle;
     this.#context = null;
   }
 
@@ -45,24 +46,16 @@ export abstract class Factory<Shape> {
     return this.#state.identifier;
   }
 
-  protected get ctx(): ReturnType<this["createContext"]> {
-    if (this.#phase !== phase.building || this.#context === null) {
+  protected get ctx(): Context<this> {
+    if (this.#context === null) {
       throw new TypeError(
-        "FactoryContext can only be accessed during the 'building' phase.",
+        "FactoryContext can only be accessed in the `construct` method.",
       );
     }
     return this.#context;
   }
 
-  // TODO: Ideally, this method is protected. However, when it is protected,
-  // it can no longer be used to infer the final factory context.
-  createContext(params?: Params<Shape>): FactoryContext<Shape> {
-    if (this.#phase !== phase.building) {
-      throw new TypeError(
-        "createContext is intended to only be used internally.",
-      );
-    }
-
+  protected createContext(params?: Params<Shape>): FactoryContext<Shape> {
     return {
       sequence: this.#state.next(),
       params,
@@ -80,15 +73,11 @@ export abstract class Factory<Shape> {
 
   build(params?: Params<Shape>): Shape {
     params = combineParams(this.#params, params);
-    this.#phase = phase.building;
 
-    this.#context = this.createContext(params) as ReturnType<
-      this["createContext"]
-    >;
+    this.#context = this.createContext(params) as Context<this>;
     const data = this.construct();
     this.#context = null;
 
-    this.#phase = phase.idle;
     return applyParams(data, params);
   }
 
