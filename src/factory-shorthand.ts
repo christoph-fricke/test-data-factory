@@ -31,7 +31,7 @@ export interface ConstructFn<Shape, F extends Factory<Shape>> {
  *
  * ```ts
  * abstract class CustomFactory<Shape> extends Factory<Shape> {
- *   // ...your custom base over overrides
+ *   // ...your custom base overrides
  * }
  *
  * export function defineFactory<Shape>(
