@@ -81,14 +81,14 @@ export abstract class Factory<Shape> {
   build(params?: Params<Shape>): Shape {
     params = combineParams(this.#params, params);
     this.#phase = phase.building;
+
     this.#context = this.createContext(params) as ReturnType<
       this["createContext"]
     >;
-
     const data = this.construct();
     this.#context = null;
-    this.#phase = phase.idle;
 
+    this.#phase = phase.idle;
     return applyParams(data, params);
   }
 
