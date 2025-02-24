@@ -37,7 +37,7 @@ export abstract class Factory<Shape> {
    *
    * The constructor requires arguments that should not concern you.
    * It is only used internally for factory creation and refinement. It only has
-   * to remain public in TypeScript to be able to extend an factory.
+   * to remain public in TypeScript to be able to extend a factory.
    *
    * @private
    */
