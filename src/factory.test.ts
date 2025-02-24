@@ -293,6 +293,18 @@ suite("Factory.prototype.seed", () => {
       b: 0,
     });
   });
+
+  test("throws an error when 'insert' returns false", async () => {
+    const store = new Store();
+    const factory = TestFactory.create();
+    store["insert"].mockReturnValue(false);
+
+    const call = () => factory.seed(store);
+
+    await expect(call).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[TypeError: Failed to insert data into store for factory "TestFactory". Does the store know this factory?]`,
+    );
+  });
 });
 
 suite("Factory.prototype.seedMany", () => {
@@ -319,6 +331,18 @@ suite("Factory.prototype.seedMany", () => {
       a: 0,
       b: 0,
     });
+  });
+
+  test("throws an error when 'insert' returns false", async () => {
+    const store = new Store();
+    const factory = TestFactory.create();
+    store["insert"].mockReturnValue(false);
+
+    const call = () => factory.seed(store);
+
+    await expect(call).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[TypeError: Failed to insert data into store for factory "TestFactory". Does the store know this factory?]`,
+    );
   });
 
   test("passes provided amount and params to buildMany", async () => {
