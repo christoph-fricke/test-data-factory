@@ -3,7 +3,6 @@
   "name": "test-data-factory",
   "type": "module",
   "version": "0.0.0",
-  "private": true,
   "license": "MIT",
   "author": "Christoph Fricke <christoph@frickeonline.de>",
   "description": "Flexible test-data factories and store mechanisms.",
