@@ -304,8 +304,12 @@ suite("Factory.prototype.seedMany", () => {
     const store = new Store();
     const factory = TestFactory.create();
 
-    await factory.seedMany(store, 2);
+    const data = await factory.seedMany(store, 2);
 
+    expect(data).toStrictEqual([
+      { a: 0, b: 0 },
+      { a: 0, b: 0 },
+    ]);
     expect(store["insert"]).toHaveBeenCalledTimes(2);
     expect(store["insert"]).toHaveBeenNthCalledWith(1, factory.identifier, {
       a: 0,
