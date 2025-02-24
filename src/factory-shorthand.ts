@@ -25,9 +25,9 @@ export interface ConstructFn<Shape, F extends Factory<Shape>> {
  *
  * ---
  *
- * If you extend {@link Factory} with your own base factory base, you can create
- * your own factory shorthand that works for you base factory. The following
- * code snippet is a great starting point for this.
+ * If you extend {@link Factory} with your own base factory, you can create a
+ * factory shorthand that is based on your base factory. The following code
+ * snippet is a great starting point for this.
  *
  * ```ts
  * abstract class CustomFactory<Shape> extends Factory<Shape> {

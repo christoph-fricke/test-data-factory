@@ -24,7 +24,6 @@ suite("Custom Context", () => {
     }
 
     const factory = TestFactory.create();
-
     const data = factory.build();
 
     expect(data).toMatchInlineSnapshot(`"Value from Context"`);

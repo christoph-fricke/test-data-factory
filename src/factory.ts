@@ -32,6 +32,15 @@ export abstract class Factory<Shape> {
 
   protected abstract construct(): Shape;
 
+  /**
+   * **Do not call the constructor directly! Use {@link Factory.create} instead.**
+   *
+   * The constructor requires arguments that should not concern you.
+   * It is only used internally for factory creation and refinement. It only has
+   * to remain public in TypeScript to be able to extend an factory.
+   *
+   * @private
+   */
   constructor(state: SharedState, params?: Params<Shape>) {
     this.#state = state;
     this.#params = params;

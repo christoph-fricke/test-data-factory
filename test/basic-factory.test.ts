@@ -36,7 +36,7 @@ suite("Basic Factory", () => {
     `);
   });
 
-  test("builds refined version of the constructed data", () => {
+  test("builds a refined version of the constructed data", () => {
     const factory = TaskFactory.create();
 
     const task = factory.completed.build();
