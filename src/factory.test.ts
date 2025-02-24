@@ -1,4 +1,5 @@
 import { expect, suite, test, vi } from "vitest";
+import { AbstractStore } from "./abstract-store.js";
 import { Factory, type FactoryContext } from "./factory.js";
 
 class TestFactory extends Factory<{ a: number; b: number }> {
@@ -172,7 +173,7 @@ suite("Factory.prototype.build", () => {
     expect(data).toStrictEqual({ a: 0, b: 0 });
   });
 
-  test("applies partial data to the result", () => {
+  test("applies given params to the result", () => {
     const factory = TestFactory.create();
 
     const data = factory.build({ a: 1 });
@@ -258,5 +259,76 @@ suite("Factory.prototype.buildMany", () => {
       { a: 1, b: 1 },
       { a: 2, b: 2 },
     ]);
+  });
+});
+
+suite("Factory.prototype.seed", () => {
+  class Store extends AbstractStore {
+    protected override insert = vi.fn(() => true);
+  }
+
+  test("inserts built data into the given store", async () => {
+    const store = new Store();
+    const factory = TestFactory.create();
+
+    const data = await factory.seed(store);
+
+    expect(data).toStrictEqual({ a: 0, b: 0 });
+    expect(store["insert"]).toHaveBeenCalledTimes(1);
+    expect(store["insert"]).toHaveBeenCalledWith(factory.identifier, {
+      a: 0,
+      b: 0,
+    });
+  });
+
+  test("applies given params to the built data", async () => {
+    const store = new Store();
+    const factory = TestFactory.create();
+
+    await factory.seed(store, { a: 1 });
+
+    expect(store["insert"]).toHaveBeenCalledTimes(1);
+    expect(store["insert"]).toHaveBeenCalledWith(factory.identifier, {
+      a: 1,
+      b: 0,
+    });
+  });
+});
+
+suite("Factory.prototype.seedMany", () => {
+  class Store extends AbstractStore {
+    protected override insert = vi.fn(() => true);
+  }
+
+  test("inserts a list of data with the given length into the store", async () => {
+    const store = new Store();
+    const factory = TestFactory.create();
+
+    await factory.seedMany(store, 2);
+
+    expect(store["insert"]).toHaveBeenCalledTimes(2);
+    expect(store["insert"]).toHaveBeenNthCalledWith(1, factory.identifier, {
+      a: 0,
+      b: 0,
+    });
+    expect(store["insert"]).toHaveBeenNthCalledWith(2, factory.identifier, {
+      a: 0,
+      b: 0,
+    });
+  });
+
+  test("passes provided amount and params to buildMany", async () => {
+    const store = new Store();
+    const factory = TestFactory.create();
+    const spy = vi.spyOn(factory, "buildMany");
+    const paramsFn = (i: number) => ({ a: i });
+
+    await factory.seedMany(store, 2, { a: 1 });
+    await factory.seedMany(store, 2, paramsFn);
+
+    expect(store["insert"]).toHaveBeenCalledTimes(4);
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenNthCalledWith(1, 2, { a: 1 });
+    expect(spy).toHaveBeenNthCalledWith(2, 2, paramsFn);
   });
 });

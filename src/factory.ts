@@ -1,3 +1,4 @@
+import type { AbstractStore } from "./abstract-store.js";
 import {
   applyParams,
   combineParams,
@@ -71,6 +72,18 @@ export abstract class Factory<Shape> {
     };
   }
 
+  async #insertData(store: AbstractStore, data: Shape): Promise<void> {
+    const inserted = await Promise.resolve(
+      store["insert"](this.identifier, data),
+    );
+
+    if (!inserted) {
+      throw new TypeError(
+        `Failed to insert data into store for factory "${this.constructor.name}". Does the store know this factory?`,
+      );
+    }
+  }
+
   reset(): void {
     this.#state.reset();
   }
@@ -96,6 +109,25 @@ export abstract class Factory<Shape> {
       const p = evalParamsOrFunc(i, list, params);
       list.push(this.build(p));
     }
+    return list;
+  }
+
+  async seed(store: AbstractStore, params?: Params<Shape>): Promise<Shape> {
+    const data = this.build(params);
+
+    await this.#insertData(store, data);
+    return data;
+  }
+
+  async seedMany(
+    store: AbstractStore,
+    amount: number,
+    params?: ParamsOrFunc<Shape>,
+  ): Promise<Shape[]> {
+    const list = this.buildMany(amount, params);
+    const insertions = list.map(this.#insertData.bind(this, store));
+
+    await Promise.all(insertions);
     return list;
   }
 }
