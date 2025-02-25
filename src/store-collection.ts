@@ -4,7 +4,7 @@ import {
   type Query,
   type StrictQuery,
   type UpdateQuery,
-} from "./query.js";
+} from "./query.ts";
 
 export class StoreCollection<Shape> {
   #entries: Shape[];

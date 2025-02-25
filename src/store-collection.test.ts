@@ -1,5 +1,5 @@
 import { expect, suite, test } from "vitest";
-import { StoreCollection } from "./store-collection.js";
+import { StoreCollection } from "./store-collection.ts";
 
 interface Data {
   a: number;

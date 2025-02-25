@@ -1,4 +1,4 @@
-import { applyParams, type Params } from "./params.js";
+import { applyParams, type Params } from "./params.ts";
 
 export interface Query<Shape> {
   where(entry: Shape): boolean;
