@@ -1,6 +1,6 @@
 import { expect, suite, test, vi } from "vitest";
-import { defineFactory } from "./factory-shorthand.js";
-import { Factory } from "./factory.js";
+import { defineFactory } from "./factory-shorthand.ts";
+import { Factory } from "./factory.ts";
 
 suite(defineFactory, () => {
   test("returns a new factory instance", () => {
