@@ -1,5 +1,5 @@
 import { expect, suite, test, vi } from "vitest";
-import { Factory, type FactoryContext } from "./factory.js";
+import { Factory, type FactoryContext } from "./factory.ts";
 
 class TestFactory extends Factory<{ a: number; b: number }> {
   protected override construct() {

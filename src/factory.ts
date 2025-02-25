@@ -4,7 +4,7 @@ import {
   evalParamsOrFunc,
   type Params,
   type ParamsOrFunc,
-} from "./params.js";
+} from "./params.ts";
 
 type ShapeFor<F> = F extends Factory<infer S> ? S : never;
 interface FactoryClass<Factory, Shape> {
