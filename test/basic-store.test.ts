@@ -13,8 +13,13 @@ const taskFactory = defineFactory<Task>((ctx) => ({
   status: "open",
 }));
 
+const greetingFactory = defineFactory<string>(
+  (ctx) => `Hello, ${ctx.sequence}!`,
+);
+
 class DataStore extends Store {
   readonly tasks = this.collection(taskFactory);
+  readonly greetings = this.collection(greetingFactory);
 
   protected override async initialize() {
     await taskFactory.seed(this);
@@ -58,5 +63,29 @@ suite("Basic Store", () => {
     await store.reset();
 
     expect(store.tasks.latest()).not.toBe(entry);
+  });
+
+  test("dumps all data for debugging", async () => {
+    const store = await DataStore.create();
+
+    await greetingFactory.seedMany(store, 3);
+    const dump = store.dump();
+
+    expect(dump).toMatchInlineSnapshot(`
+      {
+        "greetings": [
+          "Hello, 0!",
+          "Hello, 1!",
+          "Hello, 2!",
+        ],
+        "tasks": [
+          {
+            "id": 0,
+            "name": "Task 0",
+            "status": "open",
+          },
+        ],
+      }
+    `);
   });
 });

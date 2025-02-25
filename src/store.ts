@@ -6,6 +6,20 @@ interface StoreClass<Store> {
   new (): Store;
 }
 
+type DataDump<Store> = Pick<CollectionShapes<Store>, CollectionKeys<Store>>;
+type CollectionShapes<Store> = {
+  -readonly [Key in keyof Store]: Store[Key] extends StoreCollection<
+    infer Shape
+  >
+    ? Shape[]
+    : never;
+};
+type CollectionKeys<Store> = {
+  [Key in keyof Store]: Store[Key] extends StoreCollection<unknown>
+    ? Key
+    : never;
+}[keyof Store];
+
 export abstract class Store extends AbstractStore {
   #collections: Map<symbol, StoreCollection<unknown>>;
 
@@ -67,5 +81,21 @@ export abstract class Store extends AbstractStore {
     }
 
     await this.initialize();
+  }
+
+  dump(): DataDump<this> {
+    const dump = {} as DataDump<this>;
+
+    for (const key in this) {
+      const field = this[key];
+      if (!(field instanceof StoreCollection)) continue;
+
+      Object.defineProperty(dump, key, {
+        value: field.all(),
+        enumerable: true,
+      });
+    }
+
+    return dump;
   }
 }
