@@ -155,3 +155,91 @@ suite("StoreCollection.prototype.findMany", () => {
     expect(entries).toStrictEqual([]);
   });
 });
+
+suite("StoreCollection.prototype.update", () => {
+  test("updates the first entry that matches the query", () => {
+    const collection = new StoreCollection<Data>();
+    collection.insert({ a: 1, b: 0 });
+    collection.insert({ a: 1, b: 1 });
+    collection.insert({ a: 0, b: 1 });
+
+    const updated = collection.update({
+      where: (e) => e.b === 1,
+      data: { a: 2 },
+    });
+
+    expect(updated).toStrictEqual({ a: 2, b: 1 });
+    expect(collection.all()).toStrictEqual([
+      { a: 1, b: 0 },
+      { a: 2, b: 1 },
+      { a: 0, b: 1 },
+    ]);
+  });
+
+  test("throws an error when no entry matches the given query", () => {
+    const collection = new StoreCollection<Data>();
+
+    const update = () => collection.update({ where: () => false, data: {} });
+
+    expect(update).toThrowErrorMatchingInlineSnapshot(
+      `[TypeError: No entry found in the collection for the given strict query.]`,
+    );
+    expect(collection.all()).toStrictEqual([]);
+  });
+
+  test("update no entry when none matches and strict is false", () => {
+    const collection = new StoreCollection<Data>();
+
+    const updated = collection.update({
+      strict: false,
+      where: () => false,
+      data: { a: 2 },
+    });
+
+    expect(updated).toBe(null);
+    expect(collection.all()).toStrictEqual([]);
+  });
+});
+
+suite("StoreCollection.prototype.delete", () => {
+  test("deletes the first entry that matches the query", () => {
+    const collection = new StoreCollection<Data>();
+    collection.insert({ a: 1, b: 0 });
+    collection.insert({ a: 1, b: 1 });
+    collection.insert({ a: 0, b: 1 });
+
+    const entry = collection.delete({ where: (e) => e.b === 1 });
+
+    expect(entry).toStrictEqual({ a: 1, b: 1 });
+    expect(collection.all()).toStrictEqual([
+      { a: 1, b: 0 },
+      { a: 0, b: 1 },
+    ]);
+  });
+
+  test("throws an error when no entry matches the given query", () => {
+    const collection = new StoreCollection<Data>();
+
+    const search = () => collection.delete({ where: () => false });
+
+    expect(search).toThrowErrorMatchingInlineSnapshot(
+      `[TypeError: No entry found in the collection for the given strict query.]`,
+    );
+  });
+
+  test("deletes no entry when none matches and strict is false", () => {
+    const collection = new StoreCollection<Data>();
+    collection.insert({ a: 1, b: 0 });
+    collection.insert({ a: 1, b: 1 });
+    collection.insert({ a: 0, b: 1 });
+
+    const entry = collection.delete({ strict: false, where: () => false });
+
+    expect(entry).toBe(null);
+    expect(collection.all()).toStrictEqual([
+      { a: 1, b: 0 },
+      { a: 1, b: 1 },
+      { a: 0, b: 1 },
+    ]);
+  });
+});

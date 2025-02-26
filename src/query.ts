@@ -1,3 +1,5 @@
+import { applyParams, type Params } from "./params.js";
+
 export interface Query<Shape> {
   where(entry: Shape): boolean;
 }
@@ -22,4 +24,21 @@ export function assertStrict<Shape>(
   }
 
   return null;
+}
+
+type DataOrUpdateFn<Shape> = Params<Shape> | ((entry: Shape) => Params<Shape>);
+
+export interface UpdateQuery<Shape, Strict extends boolean = true>
+  extends StrictQuery<Shape, Strict> {
+  data: DataOrUpdateFn<Shape>;
+}
+
+export function applyUpdateQuery<Shape>(
+  entry: Shape,
+  query: UpdateQuery<Shape, boolean>,
+): Shape {
+  const update =
+    typeof query.data === "function" ? query.data(entry) : query.data;
+
+  return applyParams(entry, update);
 }

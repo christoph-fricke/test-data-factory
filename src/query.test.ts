@@ -1,5 +1,6 @@
-import { expect, suite, test } from "vitest";
-import { assertStrict } from "./query.js";
+import { expect, suite, test, vi } from "vitest";
+import * as params from "./params.js";
+import { applyUpdateQuery, assertStrict } from "./query.js";
 
 suite("assertStrict", () => {
   const where = () => true;
@@ -27,5 +28,40 @@ suite("assertStrict", () => {
     expect(explicit).toThrowErrorMatchingInlineSnapshot(
       `[TypeError: No entry found in the collection for the given strict query.]`,
     );
+  });
+});
+
+suite("applyUpdateQuery", () => {
+  test("calls applyParams with the entry and data", () => {
+    const spy = vi.spyOn(params, "applyParams").mockReturnValue({ a: 2 });
+    const entry = { a: 0 };
+
+    const result = applyUpdateQuery(entry, {
+      where: () => false,
+      data: { a: 1 },
+    });
+
+    expect(result).toStrictEqual({ a: 2 });
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(entry, { a: 1 });
+    spy.mockRestore();
+  });
+
+  test("calls a given update function with the old entry", () => {
+    const spy = vi.spyOn(params, "applyParams").mockReturnValue({ a: 2 });
+    const fn = vi.fn().mockReturnValue({ a: 1 });
+    const entry = { a: 0 };
+
+    const result = applyUpdateQuery(entry, {
+      where: () => false,
+      data: fn,
+    });
+
+    expect(result).toStrictEqual({ a: 2 });
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith(entry);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(entry, { a: 1 });
+    spy.mockRestore();
   });
 });

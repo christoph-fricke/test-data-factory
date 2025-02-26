@@ -1,4 +1,10 @@
-import { assertStrict, type Query, type StrictQuery } from "./query.js";
+import {
+  applyUpdateQuery,
+  assertStrict,
+  type Query,
+  type StrictQuery,
+  type UpdateQuery,
+} from "./query.js";
 
 export class StoreCollection<Shape> {
   #entries: Shape[];
@@ -39,5 +45,28 @@ export class StoreCollection<Shape> {
 
   findMany(query: Query<Shape>): Shape[] {
     return this.#entries.filter(query.where);
+  }
+
+  update(query: UpdateQuery<Shape, true>): Shape;
+  update(query: UpdateQuery<Shape, false>): Shape | null;
+  update(query: UpdateQuery<Shape, boolean>): Shape | null {
+    const index = this.#entries.findIndex(query.where);
+    const entry = assertStrict(query, this.#entries[index]);
+    if (!entry) return null;
+
+    const updated = applyUpdateQuery(entry, query);
+    this.#entries[index] = updated;
+    return updated;
+  }
+
+  delete(query: StrictQuery<Shape, true>): Shape;
+  delete(query: StrictQuery<Shape, false>): Shape | null;
+  delete(query: StrictQuery<Shape, boolean>): Shape | null {
+    const index = this.#entries.findIndex(query.where);
+    const entry = assertStrict(query, this.#entries[index]);
+    if (!entry) return null;
+
+    this.#entries.splice(index, 1);
+    return entry;
   }
 }
