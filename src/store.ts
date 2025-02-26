@@ -45,6 +45,10 @@ export abstract class Store extends AbstractStore {
     return store;
   }
 
+  protected initialize(): Promise<void> {
+    return Promise.resolve();
+  }
+
   #findCollection<Shape>(
     identifier: symbol,
   ): StoreCollection<Shape> | undefined {
@@ -69,10 +73,6 @@ export abstract class Store extends AbstractStore {
     const collection = new StoreCollection<Shape>();
     this.#collections.set(factory.identifier, collection);
     return collection;
-  }
-
-  protected initialize(): Promise<void> {
-    return Promise.resolve();
   }
 
   async reset(): Promise<void> {
