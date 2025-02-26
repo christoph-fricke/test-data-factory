@@ -90,3 +90,68 @@ suite("StoreCollection.prototype.insert", () => {
     expect(collection.latest()).toStrictEqual(entry);
   });
 });
+
+suite("StoreCollection.prototype.find", () => {
+  test("returns the first entry that matches the query", () => {
+    const collection = new StoreCollection<Data>();
+    collection.insert({ a: 1, b: 0 });
+    collection.insert({ a: 1, b: 1 });
+    collection.insert({ a: 0, b: 1 });
+
+    const entry = collection.find({ where: (e) => e.b === 1 });
+
+    expect(entry).toStrictEqual({ a: 1, b: 1 });
+  });
+
+  test("throws an error when no entry matches the given query", () => {
+    const collection = new StoreCollection<Data>();
+
+    const search = () => collection.find({ where: () => false });
+
+    expect(search).toThrowErrorMatchingInlineSnapshot(
+      `[TypeError: No entry found in the collection for the given strict query.]`,
+    );
+  });
+
+  test("returns null when no entry matches the query and strict is false", () => {
+    const collection = new StoreCollection<Data>();
+
+    const entry = collection.find({ strict: false, where: () => false });
+
+    expect(entry).toBe(null);
+  });
+});
+
+suite("StoreCollection.prototype.findMany", () => {
+  test("returns all entries that match the query", () => {
+    const collection = new StoreCollection<Data>();
+    collection.insert({ a: 1, b: 0 });
+    collection.insert({ a: 1, b: 1 });
+    collection.insert({ a: 0, b: 1 });
+
+    const entries = collection.findMany({ where: (e) => e.a === 1 });
+
+    expect(entries).toStrictEqual([
+      { a: 1, b: 0 },
+      { a: 1, b: 1 },
+    ]);
+  });
+
+  test("returns an empty array when no entries match the query", () => {
+    const collection = new StoreCollection<Data>();
+    collection.insert({ a: 1, b: 0 });
+    collection.insert({ a: 0, b: 1 });
+
+    const entries = collection.findMany({ where: () => false });
+
+    expect(entries).toStrictEqual([]);
+  });
+
+  test("returns an empty array when the collection is empty", () => {
+    const collection = new StoreCollection<Data>();
+
+    const entries = collection.findMany({ where: () => true });
+
+    expect(entries).toStrictEqual([]);
+  });
+});

@@ -1,3 +1,5 @@
+import { assertStrict, type Query, type StrictQuery } from "./query.js";
+
 export class StoreCollection<Shape> {
   #entries: Shape[];
 
@@ -26,5 +28,16 @@ export class StoreCollection<Shape> {
   insert(entry: Shape): Shape {
     this.#entries.push(entry);
     return entry;
+  }
+
+  find(query: StrictQuery<Shape, true>): Shape;
+  find(query: StrictQuery<Shape, false>): Shape | null;
+  find(query: StrictQuery<Shape, boolean>): Shape | null {
+    const entry = this.#entries.find(query.where);
+    return assertStrict(query, entry);
+  }
+
+  findMany(query: Query<Shape>): Shape[] {
+    return this.#entries.filter(query.where);
   }
 }
