@@ -55,6 +55,15 @@ export abstract class Store extends AbstractStore {
     return this.#collections.get(identifier) as StoreCollection<Shape>;
   }
 
+  /**
+   * Implements the {@link AbstractStore} protocol to interface with
+   * {@link Factory|Factories}. This method should not be changed or used directly.
+   *
+   * Prefer using {@link Factory.seed} and {@link Factory.seedMany} to insert data
+   * into the store.
+   *
+   * @private
+   */
   protected override insert<Shape>(identifier: symbol, entry: Shape): boolean {
     const collection = this.#findCollection(identifier);
     if (!collection) return false;
