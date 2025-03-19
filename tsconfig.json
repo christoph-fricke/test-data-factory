@@ -12,6 +12,7 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
+    "erasableSyntaxOnly": true,
 
     /* Type Checking */
     "strict": true,

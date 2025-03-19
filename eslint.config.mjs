@@ -1,11 +1,12 @@
-import eslint from "@eslint/js";
-import tsEslint, { config } from "typescript-eslint";
+import js from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
+import ts from "typescript-eslint";
 
-export default config(
-  { ignores: ["dist"] },
-  eslint.configs.recommended,
-  ...tsEslint.configs.recommended,
-  ...tsEslint.configs.stylistic,
+export default defineConfig(
+  globalIgnores(["coverage", "dist"]),
+  js.configs.recommended,
+  ts.configs.recommended,
+  ts.configs.stylistic,
   {
     rules: {
       "@typescript-eslint/prefer-function-type": "off",

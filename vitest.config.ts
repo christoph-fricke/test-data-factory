@@ -12,14 +12,14 @@ export default defineConfig({
         extends: true,
         test: {
           name: "unit",
-          include: ["src/**/*.test.ts"],
+          root: "src",
         },
       },
       {
         extends: true,
         test: {
           name: "integration",
-          include: ["test/**/*.test.ts"],
+          root: "test",
         },
       },
     ],
