@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/package.json",
   "name": "test-data-factory",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "author": "Christoph Fricke <christoph@frickeonline.de>",
   "description": "Flexible test-data factories and store mechanisms.",
