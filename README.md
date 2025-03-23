@@ -90,8 +90,11 @@ export class DataStore extends Store {
 
 // Creating and using the Store...
 const store = await DataStore.create();
-await taskFactory.seedMany(store, 3);
+const tasks = await taskFactory.seedMany(store, 3);
 await userFactory.seed(store, { name: "Christoph" });
+
+const task = store.tasks.find({ where: (t) => t.id === 3 });
+const latestUser = store.users.latest();
 
 // A "dump" is an object that contains the all store entries.
 // The dump is fully type-safe, in case you want to operate on it further.
