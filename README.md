@@ -48,14 +48,14 @@ class TaskFactory extends Factory<Task> {
     return this.refine({ status: "completed" });
   }
 }
-const factory = TaskFactory.create();
+export const taskFactory = TaskFactory.create();
 
 // Build a task without any overrides
-const task = factory.build();
+const task = taskFactory.build();
 // Provide params to override the result
-const task = factory.build({ name: "Check Mailbox" });
+const task = taskFactory.build({ name: "Check Mailbox" });
 // Builds a completed task
-const task = factory.completed.build();
+const task = taskFactory.completed.build();
 ```
 
 ### Factory Shorthand
@@ -68,6 +68,37 @@ const factory = defineFactory<string>((ctx) => `T-${ctx.sequence}`);
 // Shorthand factories can be used like "normal factories"
 const id = factory.build();
 const ids = factory.buildMany(3);
+```
+
+### Stores
+
+```typescript
+import { Store } from "test-data-factory";
+import { taskFactory } from "./task.js";
+import { userFactory } from "./user.js";
+
+export class DataStore extends Store {
+  tasks = this.collection(taskFactory);
+  users = this.collection(userFactory);
+
+  // Optionally, you can seed your stores with initial data.
+  // Called when an instance is created.
+  protected override async initialize(): Promise<void> {
+    await userFactory.seed(this);
+  }
+}
+
+// Creating and using the Store...
+const store = await DataStore.create();
+await taskFactory.seedMany(store, 3);
+await userFactory.seed(store, { name: "Christoph" });
+
+// A "dump" is an object that contains the all store entries.
+// The dump is fully type-safe, in case you want to operate on it further.
+console.log(store.dump());
+
+// Removes all entries and re-initializes the store.
+await store.reset();
 ```
 
 ## Advanced Usage
