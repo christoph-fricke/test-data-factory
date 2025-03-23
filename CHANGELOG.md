@@ -1,5 +1,15 @@
 # test-data-factory
 
+## 0.2.0
+
+### Minor Changes
+
+- [#8](https://github.com/christoph-fricke/test-data-factory/pull/8) [`693eebf`](https://github.com/christoph-fricke/test-data-factory/commit/693eebf3e6dcd23d89df691699885ab717e37701) Thanks [@christoph-fricke](https://github.com/christoph-fricke)! - Added an abstract `AbstractStore` class as a contract between factories and stores.
+
+- [#13](https://github.com/christoph-fricke/test-data-factory/pull/13) [`772c52f`](https://github.com/christoph-fricke/test-data-factory/commit/772c52ffcc229c901833ca1edcfc51f00a041071) Thanks [@christoph-fricke](https://github.com/christoph-fricke)! - Added `Store` class as an in-memory test-data store. The store implements the contract defined by `AbstractStore` to be usable with factories.
+
+- [#8](https://github.com/christoph-fricke/test-data-factory/pull/8) [`693eebf`](https://github.com/christoph-fricke/test-data-factory/commit/693eebf3e6dcd23d89df691699885ab717e37701) Thanks [@christoph-fricke](https://github.com/christoph-fricke)! - Added `seed()` and `seedMany()` methods to factories, which insert built test-data into a given store. They accept any store that extends the `AbstractStore` class.
+
 ## 0.1.0
 
 ### Minor Changes
