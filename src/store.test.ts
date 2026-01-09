@@ -1,8 +1,8 @@
 import { expect, suite, test, vi } from "vitest";
-import { AbstractStore } from "./abstract-store.js";
-import { defineFactory } from "./factory-shorthand.js";
-import { StoreCollection } from "./store-collection.js";
-import { Store } from "./store.js";
+import { AbstractStore } from "./abstract-store.ts";
+import { defineFactory } from "./factory-shorthand.ts";
+import { StoreCollection } from "./store-collection.ts";
+import { Store } from "./store.ts";
 
 suite("Store.create", () => {
   test("creates a new instance of the implementing store class", async () => {

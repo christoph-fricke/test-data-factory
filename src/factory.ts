@@ -1,11 +1,11 @@
-import type { AbstractStore } from "./abstract-store.js";
+import type { AbstractStore } from "./abstract-store.ts";
 import {
   applyParams,
   combineParams,
   evalParamsOrFunc,
   type Params,
   type ParamsOrFunc,
-} from "./params.js";
+} from "./params.ts";
 
 type ShapeFor<F> = F extends Factory<infer S> ? S : never;
 interface FactoryClass<Factory, Shape> {

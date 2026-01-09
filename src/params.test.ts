@@ -1,5 +1,5 @@
 import { expect, suite, test, vi } from "vitest";
-import { applyParams, combineParams, evalParamsOrFunc } from "./params.js";
+import { applyParams, combineParams, evalParamsOrFunc } from "./params.ts";
 
 suite.for([applyParams, combineParams])("%o shared", (paramsFn) => {
   test("returns the given entry when no params are provided", () => {

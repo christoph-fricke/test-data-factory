@@ -1,6 +1,6 @@
-import { AbstractStore } from "./abstract-store.js";
-import type { Factory } from "./factory.js";
-import { StoreCollection } from "./store-collection.js";
+import { AbstractStore } from "./abstract-store.ts";
+import type { Factory } from "./factory.ts";
+import { StoreCollection } from "./store-collection.ts";
 
 interface StoreClass<Store> {
   new (): Store;

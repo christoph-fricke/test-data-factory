@@ -1,6 +1,6 @@
 import { expect, suite, test, vi } from "vitest";
-import * as params from "./params.js";
-import { applyUpdateQuery, assertStrict } from "./query.js";
+import * as params from "./params.ts";
+import { applyUpdateQuery, assertStrict } from "./query.ts";
 
 suite("assertStrict", () => {
   const where = () => true;
