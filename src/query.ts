@@ -4,8 +4,10 @@ export interface Query<Shape> {
   where(entry: Shape): boolean;
 }
 
-export interface StrictQuery<Shape, Strict extends boolean = true>
-  extends Query<Shape> {
+export interface StrictQuery<
+  Shape,
+  Strict extends boolean = true,
+> extends Query<Shape> {
   /** @default true */
   strict?: Strict;
 }
@@ -28,8 +30,10 @@ export function assertStrict<Shape>(
 
 type DataOrUpdateFn<Shape> = Params<Shape> | ((entry: Shape) => Params<Shape>);
 
-export interface UpdateQuery<Shape, Strict extends boolean = true>
-  extends StrictQuery<Shape, Strict> {
+export interface UpdateQuery<
+  Shape,
+  Strict extends boolean = true,
+> extends StrictQuery<Shape, Strict> {
   data: DataOrUpdateFn<Shape>;
 }
 

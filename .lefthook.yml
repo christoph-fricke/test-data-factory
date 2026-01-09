@@ -1,4 +1,3 @@
-# Runs commands in sequence to ensure that eslint fixes are formatted as well.
 pre-commit:
   parallel: false
   commands:
