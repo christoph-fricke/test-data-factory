@@ -9,14 +9,16 @@
   "repository": "github:christoph-fricke/test-data-factory",
   "files": [
     "dist",
-    "CHANGELOG.md",
+    "exports",
+    "src",
+    "!src/**/*.test.ts",
     "README.md",
     "LICENSE"
   ],
   "exports": {
     ".": {
       "types": "./dist/exports/main.d.ts",
-      "import": "./dist/exports/main.js"
+      "default": "./dist/exports/main.js"
     }
   },
   "scripts": {
