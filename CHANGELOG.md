@@ -1,5 +1,11 @@
 # test-data-factory
 
+## 0.3.0
+
+### Minor Changes
+
+- [#18](https://github.com/christoph-fricke/test-data-factory/pull/18) [`38a5416`](https://github.com/christoph-fricke/test-data-factory/commit/38a54166005cd263eae1050dc1f20d3e720184e0) Thanks [@christoph-fricke](https://github.com/christoph-fricke)! - Added declaration maps to the build output. Together with packaged source files, this enables proper "Go To Definition" support in editors — jumping directly to the TypeScript source file instead of the declaration file.
+
 ## 0.2.0
 
 ### Minor Changes
