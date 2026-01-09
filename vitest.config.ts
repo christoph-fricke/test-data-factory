@@ -7,7 +7,7 @@ export default defineConfig({
       include: ["dist/**", "exports/**", "src/**"],
       exclude: ["dist/**/*.d.ts"],
     },
-    workspace: [
+    projects: [
       {
         extends: true,
         test: {
