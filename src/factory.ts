@@ -7,7 +7,7 @@ import {
   type ParamsOrFunc,
 } from "./params.ts";
 
-type ShapeFor<F> = F extends Factory<infer S> ? S : never;
+export type ShapeFor<F> = F extends Factory<infer S> ? S : never;
 interface FactoryClass<Factory, Shape> {
   new (state: SharedState, params?: Params<Shape>): Factory;
 }
